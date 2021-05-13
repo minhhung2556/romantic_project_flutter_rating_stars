@@ -2,7 +2,7 @@
 
 A Flutter package to create Rating Stars bar. It will be useful for your awesome app.
 
-![Imgur](https://imgur.com/download/yAopnru)
+![Imgur](https://imgur.com/download/9my0OAt)
 
 ### Example
 
