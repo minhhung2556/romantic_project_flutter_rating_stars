@@ -6,6 +6,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/generated/assets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+/// {@tool snippet}
+/// This is a sample of a [StarRating] widget.
+///
+/// ```dart
+///          StarRating(
+///             value: value,
+///             onValueChanged: (v) {
+///               //
+///               setState(() {
+///                 value = v;
+///               });
+///             },
+///             starBuilder: (index, color) => Icon(
+///               Icons.ac_unit_outlined,
+///               color: color,
+///             ),
+///             starCount: 5,
+///             starSize: 20,
+///             valueLabelColor: const Color(0xff9b9b9b),
+///             valueLabelTextStyle: const TextStyle(
+///                 color: Colors.white,
+///                 fontWeight: FontWeight.w400,
+///                 fontStyle: FontStyle.normal,
+///                 fontSize: 12.0),
+///             valueLabelRadius: 10,
+///             maxValue: 5,
+///             starSpacing: 2,
+///             maxValueVisibility: true,
+///             valueLabelVisibility: true,
+///             animationDuration: Duration(milliseconds: 1000),
+///             valueLabelPadding:
+///                 const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+///             valueLabelMargin: const EdgeInsets.only(right: 8),
+///             starOffColor: const Color(0xffe7e8ea),
+///             starColor: Colors.yellow,
+///          )
+/// ```
+/// {@end-tool}
 class StarRating extends StatefulWidget {
   final double maxValue;
   final double value;
@@ -24,6 +62,24 @@ class StarRating extends StatefulWidget {
   final Color starColor;
   final Function(double value)? onValueChanged;
   final Widget Function(int index, Color? color)? starBuilder;
+
+  /// * [value] is value in [0...{maxValue}].
+  /// * [maxValue]
+  /// * [onValueChanged] if it is not null RatingStar allows clicking.
+  /// * [starCount]
+  /// * [starSize] is size of star widget.
+  /// * [starOffColor]
+  /// * [starColor]
+  /// * [starBuilder] use to build your own stars.
+  /// * [starSpacing] is spacing between stars.
+  /// * [valueLabelVisibility] show/hide value label at the left side.
+  /// * [valueLabelColor]
+  /// * [valueLabelTextStyle]
+  /// * [valueLabelRadius]
+  /// * [valueLabelPadding]
+  /// * [valueLabelMargin]
+  /// * [maxValueVisibility] show/hide max value in value label at the left side.
+  /// * [animationDuration] animated when the [value] is changed.
 
   const StarRating({
     Key? key,
