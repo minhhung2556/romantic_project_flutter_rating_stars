@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/generated/assets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// {@tool snippet}
 /// This is a sample of a [StarRating] widget.
@@ -235,7 +234,7 @@ class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
             width: widget.starSize,
             height: widget.starSize,
           )
-        : SvgPicture.asset(
+        : Image.asset(
             Assets.assetsStarOff,
             width: widget.starSize,
             height: widget.starSize,

@@ -1,6 +1,6 @@
 name: flutter_rating_stars
 description: A Flutter package to create Rating Stars bar. It will be useful for your awesome app.
-version: 1.0.1
+version: 1.0.2
 homepage: https://minhhung2556.medium.com
 repository: https://gitlab.com/romantic_project/flutter_rating_stars
 
@@ -12,12 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_svg: ^0.22.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
   assets:
-    - assets/star_off.svg
+    - assets/star_off.png

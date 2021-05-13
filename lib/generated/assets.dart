@@ -2,5 +2,5 @@
 class Assets {
   Assets._();
 
-  static const String assetsStarOff = 'assets/star_off.svg';
+  static const String assetsStarOff = 'assets/star_off.png';
 }
