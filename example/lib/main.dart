@@ -30,6 +30,10 @@ class _MyAppState extends State<MyApp> {
                 value = v;
               });
             },
+            starBuilder: (index, color) => Icon(
+              Icons.ac_unit_outlined,
+              color: color,
+            ),
             starCount: 5,
             starSize: 20,
             valueLabelColor: const Color(0xff9b9b9b),

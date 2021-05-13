@@ -23,6 +23,7 @@ class StarRating extends StatefulWidget {
   final Color starOffColor;
   final Color starColor;
   final Function(double value)? onValueChanged;
+  final Widget Function(int index, Color? color)? starBuilder;
 
   const StarRating({
     Key? key,
@@ -47,6 +48,7 @@ class StarRating extends StatefulWidget {
     this.starOffColor = const Color(0xffe7e8ea),
     this.starColor = Colors.yellow,
     this.onValueChanged,
+    this.starBuilder,
   }) : super(key: key);
 
   @override
@@ -90,7 +92,6 @@ class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         if (widget.valueLabelVisibility)
@@ -172,13 +173,19 @@ class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
   }
 
   Widget _starWidget(int index, bool action, [Color? color]) {
-    var _star = SvgPicture.asset(
-      Assets.assetsStarOff,
-      width: widget.starSize,
-      height: widget.starSize,
-      package: 'flutter_rating_stars',
-      color: color,
-    );
+    var _star = widget.starBuilder != null
+        ? SizedBox(
+            child: widget.starBuilder!(index, color),
+            width: widget.starSize,
+            height: widget.starSize,
+          )
+        : SvgPicture.asset(
+            Assets.assetsStarOff,
+            width: widget.starSize,
+            height: widget.starSize,
+            package: 'flutter_rating_stars',
+            color: color,
+          );
     if (!action) return _star;
     return ElevatedButton(
       style: ButtonStyle(
