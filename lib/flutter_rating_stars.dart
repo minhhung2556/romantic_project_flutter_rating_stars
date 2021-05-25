@@ -5,11 +5,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/generated/assets.dart';
 
-/// {@tool snippet}
-/// This is a sample of a [StarRating] widget.
+/// This is a RatingStars widget. it shows a row of stars that describes how many scores a field gets.
+/// Star items have an action also that allows use in more cases.
 ///
+/// {@tool snippet}
+/// Example:
 /// ```dart
-///          StarRating(
+///          RatingStars(
 ///             value: value,
 ///             onValueChanged: (v) {
 ///               //
@@ -43,7 +45,7 @@ import 'package:flutter_rating_stars/generated/assets.dart';
 ///          )
 /// ```
 /// {@end-tool}
-class StarRating extends StatefulWidget {
+class RatingStars extends StatefulWidget {
   final double maxValue;
   final double value;
   final int starCount;
@@ -62,25 +64,27 @@ class StarRating extends StatefulWidget {
   final Function(double value)? onValueChanged;
   final Widget Function(int index, Color? color)? starBuilder;
 
-  /// * [value] is value in [0...{maxValue}].
+  /// Create a RatingStars
+  ///
+  /// * [value] is value in 0...[maxValue].
   /// * [maxValue]
-  /// * [onValueChanged] if it is not null RatingStar allows clicking.
-  /// * [starCount]
+  /// * [onValueChanged] if it is not null RatingStars is able to click to change the value, and it is calculated by rounded star count only. Ex: [maxValue] is 12, [starCount] is 5, clicked on 3th star, [onValueChanged] is called with [value] is 3*12/5=7.2
+  /// * [starCount] count of stars, whatever you want.
   /// * [starSize] is size of star widget.
-  /// * [starOffColor]
-  /// * [starColor]
-  /// * [starBuilder] use to build your own stars.
+  /// * [starOffColor] is the color of the star widget that [value] doesn't reach yet.
+  /// * [starColor]  is the color of the star widget that [value] reaches.
+  /// * [starBuilder] use to build your own star widget. By default, it use a star image from assets.
   /// * [starSpacing] is spacing between stars.
   /// * [valueLabelVisibility] show/hide value label at the left side.
-  /// * [valueLabelColor]
-  /// * [valueLabelTextStyle]
-  /// * [valueLabelRadius]
-  /// * [valueLabelPadding]
-  /// * [valueLabelMargin]
+  /// * [valueLabelColor] is the color background of label widget.
+  /// * [valueLabelTextStyle] is the textStyle of text widget inside the label.
+  /// * [valueLabelRadius] is the border radius of the label widget.
+  /// * [valueLabelPadding] is the padding of the label widget.
+  /// * [valueLabelMargin] is the margin of label widget.
   /// * [maxValueVisibility] show/hide max value in value label at the left side.
   /// * [animationDuration] animated when the [value] is changed.
 
-  const StarRating({
+  const RatingStars({
     Key? key,
     this.value = 0,
     this.starCount = 5,
@@ -107,10 +111,11 @@ class StarRating extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StarRatingState createState() => _StarRatingState();
+  _RatingStarsState createState() => _RatingStarsState();
 }
 
-class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
+class _RatingStarsState extends State<RatingStars>
+    with TickerProviderStateMixin {
   AnimationController? animationController;
 
   @override
@@ -130,7 +135,7 @@ class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
   }
 
   @override
-  void didUpdateWidget(covariant StarRating oldWidget) {
+  void didUpdateWidget(covariant RatingStars oldWidget) {
     if (widget.value != oldWidget.value) {
       animationController!.duration = _calculateDuration();
       animationController!.forward(from: 0);
@@ -148,6 +153,7 @@ class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         if (widget.valueLabelVisibility)
           Container(
@@ -260,7 +266,8 @@ class _StarRatingState extends State<StarRating> with TickerProviderStateMixin {
           ? null
           : () {
               var v = index + 1.0;
-              print('_StarRatingState._starWidget.onValueChanged: $v');
+              v = v * widget.maxValue / widget.starCount;
+              // print('_RatingStarsState._starWidget.onValueChanged: $v');
               widget.onValueChanged!(v);
             },
       child: _star,
