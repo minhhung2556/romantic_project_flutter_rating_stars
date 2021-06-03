@@ -46,44 +46,58 @@ import 'package:flutter_rating_stars/generated/assets.dart';
 /// ```
 /// {@end-tool}
 class RatingStars extends StatefulWidget {
+  /// [maxValue]
   final double maxValue;
+
+  /// [value] is value in 0...[maxValue].
   final double value;
+
+  /// [starCount] count of stars, whatever you want.
   final int starCount;
+
+  /// [starSize] is size of star widget.
   final double starSize;
+
+  /// [valueLabelColor] is the color background of label widget.
   final Color valueLabelColor;
+
+  /// [valueLabelTextStyle] is the textStyle of text widget inside the label.
   final TextStyle valueLabelTextStyle;
+
+  /// [valueLabelRadius] is the border radius of the label widget.
   final double valueLabelRadius;
+
+  /// [starSpacing] is spacing between stars.
   final double starSpacing;
+
+  /// [maxValueVisibility] show/hide max value in value label at the left side.
   final bool maxValueVisibility;
+
+  /// [valueLabelVisibility] show/hide value label at the left side.
   final bool valueLabelVisibility;
-  final Duration animationDuration;
+
+  /// [valueLabelPadding] is the padding of the label widget.
   final EdgeInsets valueLabelPadding;
+
+  /// [valueLabelMargin] is the margin of label widget.
   final EdgeInsets valueLabelMargin;
+
+  /// [starOffColor] is the color of the star widget that [value] doesn't reach yet.
   final Color starOffColor;
+
+  /// [starColor]  is the color of the star widget that [value] reaches.
   final Color starColor;
+
+  /// [onValueChanged] if it is not null RatingStars is able to click to change the value, and it is calculated by rounded star count only. Ex: [maxValue] is 12, [starCount] is 5, clicked on 3th star, [onValueChanged] is called with [value] is 3*12/5=7.2
   final Function(double value)? onValueChanged;
+
+  /// [starBuilder] use to build your own star widget. By default, it use a star image from assets.
   final Widget Function(int index, Color? color)? starBuilder;
 
-  /// Create a RatingStars
-  ///
-  /// * [value] is value in 0...[maxValue].
-  /// * [maxValue]
-  /// * [onValueChanged] if it is not null RatingStars is able to click to change the value, and it is calculated by rounded star count only. Ex: [maxValue] is 12, [starCount] is 5, clicked on 3th star, [onValueChanged] is called with [value] is 3*12/5=7.2
-  /// * [starCount] count of stars, whatever you want.
-  /// * [starSize] is size of star widget.
-  /// * [starOffColor] is the color of the star widget that [value] doesn't reach yet.
-  /// * [starColor]  is the color of the star widget that [value] reaches.
-  /// * [starBuilder] use to build your own star widget. By default, it use a star image from assets.
-  /// * [starSpacing] is spacing between stars.
-  /// * [valueLabelVisibility] show/hide value label at the left side.
-  /// * [valueLabelColor] is the color background of label widget.
-  /// * [valueLabelTextStyle] is the textStyle of text widget inside the label.
-  /// * [valueLabelRadius] is the border radius of the label widget.
-  /// * [valueLabelPadding] is the padding of the label widget.
-  /// * [valueLabelMargin] is the margin of label widget.
-  /// * [maxValueVisibility] show/hide max value in value label at the left side.
-  /// * [animationDuration] animated when the [value] is changed.
+  /// [animationDuration] animated when the [value] is changed.
+  final Duration animationDuration;
 
+  /// Constructor
   const RatingStars({
     Key? key,
     this.value = 0,
@@ -116,13 +130,13 @@ class RatingStars extends StatefulWidget {
 
 class _RatingStarsState extends State<RatingStars>
     with TickerProviderStateMixin {
-  AnimationController? animationController;
+  AnimationController? _animationController;
 
   @override
   void initState() {
-    animationController =
+    _animationController =
         AnimationController(vsync: this, duration: _calculateDuration());
-    animationController!.forward(from: 0);
+    _animationController!.forward(from: 0);
     super.initState();
   }
 
@@ -137,15 +151,15 @@ class _RatingStarsState extends State<RatingStars>
   @override
   void didUpdateWidget(covariant RatingStars oldWidget) {
     if (widget.value != oldWidget.value) {
-      animationController!.duration = _calculateDuration();
-      animationController!.forward(from: 0);
+      _animationController!.duration = _calculateDuration();
+      _animationController!.forward(from: 0);
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    animationController?.dispose();
+    _animationController?.dispose();
     super.dispose();
   }
 
@@ -187,7 +201,7 @@ class _RatingStarsState extends State<RatingStars>
             ),
             IgnorePointer(
               child: AnimatedBuilder(
-                animation: animationController!,
+                animation: _animationController!,
                 builder: (context, child) {
                   return ClipRect(
                     child: Container(
@@ -213,7 +227,7 @@ class _RatingStarsState extends State<RatingStars>
                                       .chain(CurveTween(
                                           curve: Interval(0.15 * index, 1.0,
                                               curve: Curves.elasticOut)))
-                                      .evaluate(animationController!),
+                                      .evaluate(_animationController!),
                                   child: _starWidget(
                                       index, false, widget.starColor),
                                 ),
