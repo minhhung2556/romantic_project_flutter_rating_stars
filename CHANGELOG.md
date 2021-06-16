@@ -1,3 +1,7 @@
+## [1.0.3+2] - 16/06/2021
+
+* Update information.
+
 ## [1.0.3+1] - 04/06/2021
 
 * Update documentation comments.
