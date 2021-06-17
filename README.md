@@ -23,10 +23,9 @@ class _MyAppState extends State<MyApp> {
           title: Text('Example'),
         ),
         body: Center(
-          child: StarRating(
+          child: RatingStar(
             value: value,
             onValueChanged: (v) {
-              //
               setState(() {
                 value = v;
               });
