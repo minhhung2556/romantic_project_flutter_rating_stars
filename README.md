@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
           title: Text('Example'),
         ),
         body: Center(
-          child: StarRating(
+          child: RatingStars(
             value: value,
             onValueChanged: (v) {
               //
