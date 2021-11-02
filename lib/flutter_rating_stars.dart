@@ -97,6 +97,9 @@ class RatingStars extends StatefulWidget {
   /// [animationDuration] animated when the [value] is changed.
   final Duration animationDuration;
 
+  /// [angle] to turn all stars in around z-axis. If its null then its value is zero.
+  final double? angle;
+
   /// Constructor
   const RatingStars({
     Key? key,
@@ -122,6 +125,7 @@ class RatingStars extends StatefulWidget {
     this.starColor = Colors.yellow,
     this.onValueChanged,
     this.starBuilder,
+    this.angle,
   }) : super(key: key);
 
   @override
@@ -254,12 +258,15 @@ class _RatingStarsState extends State<RatingStars>
             width: widget.starSize,
             height: widget.starSize,
           )
-        : Image.asset(
-            Assets.assetsStarOff,
-            width: widget.starSize,
-            height: widget.starSize,
-            package: 'flutter_rating_stars',
-            color: color,
+        : Transform.rotate(
+            angle: widget.angle != null ? widget.angle! * 0.0174532925 : 0,
+            child: Image.asset(
+              Assets.assetsStarOff,
+              width: widget.starSize,
+              height: widget.starSize,
+              package: 'flutter_rating_stars',
+              color: color,
+            ),
           );
     if (!action) return _star;
     return ElevatedButton(
