@@ -10,6 +10,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   double value = 3.5;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,38 +22,112 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Example'),
         ),
-        body: Center(
-          child: RatingStars(
-            value: value,
-            onValueChanged: (v) {
-              //
-              setState(() {
-                value = v;
-              });
-            },
-            starBuilder: (index, color) => Icon(
-              Icons.ac_unit_outlined,
-              color: color,
-            ),
-            starCount: 5,
-            starSize: 20,
-            valueLabelColor: const Color(0xff9b9b9b),
-            valueLabelTextStyle: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
-                fontSize: 12.0),
-            valueLabelRadius: 10,
-            maxValue: 5,
-            starSpacing: 2,
-            maxValueVisibility: true,
-            valueLabelVisibility: true,
-            animationDuration: Duration(milliseconds: 1000),
-            valueLabelPadding:
+        body: Container(
+          alignment: Alignment.center,
+          color: Colors.blueGrey,
+          padding: EdgeInsets.all(36),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Horizontal example'),
+              RatingStars(
+                value: value,
+                onValueChanged: (v) {
+                  //
+                  setState(() {
+                    value = v;
+                  });
+                },
+                starBuilder: (index, color) => Icon(
+                  Icons.accessibility_new,
+                  color: color,
+                ),
+                starCount: 5,
+                starSize: 20,
+                valueLabelColor: const Color(0xff9b9b9b),
+                valueLabelTextStyle: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 12.0),
+                valueLabelRadius: 10,
+                maxValue: 5,
+                starSpacing: 2,
+                maxValueVisibility: true,
+                valueLabelVisibility: true,
+                animationDuration: Duration(milliseconds: 1000),
+                valueLabelPadding:
+                    const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                valueLabelMargin: const EdgeInsets.only(right: 8),
+                starOffColor: const Color(0xffe7e8ea),
+                starColor: Colors.yellow,
+              ),
+              const Divider(height: 10),Text('Vertical example'),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RatingStars(
+                    axis: Axis.vertical,
+                    value: value,
+                    onValueChanged: (v) {
+                      //
+                      setState(() {
+                        value = v;
+                      });
+                    },
+                    starCount: 5,
+                    starSize: 20,
+                    valueLabelColor: const Color(0xff9b9b9b),
+                    valueLabelTextStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    valueLabelRadius: 10,
+                    maxValue: 5,
+                    starSpacing: 2,
+                    maxValueVisibility: true,
+                    valueLabelVisibility: true,
+                    animationDuration: Duration(milliseconds: 1000),
+                    valueLabelPadding:
+                        const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                    valueLabelMargin: const EdgeInsets.only(right: 8),
+                    starOffColor: const Color(0xffe7e8ea),
+                    starColor: Colors.yellow,
+                  ),
+                ],
+              ),const Divider(height: 10),Text('Rotate example'),
+              RatingStars(
+                axis: Axis.horizontal,
+                value: value,
+                onValueChanged: (v) {
+                  //
+                  setState(() {
+                    value = v;
+                  });
+                },
+                starCount: 5,
+                starSize: 20,
+                valueLabelColor: const Color(0xff9b9b9b),
+                valueLabelTextStyle: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 12.0),
+                valueLabelRadius: 10,
+                maxValue: 5,
+                starSpacing: 2,
+                maxValueVisibility: true,
+                valueLabelVisibility: true,
+                animationDuration: Duration(milliseconds: 1000),
+                valueLabelPadding:
                 const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-            valueLabelMargin: const EdgeInsets.only(right: 8),
-            starOffColor: const Color(0xffe7e8ea),
-            starColor: Colors.yellow,
+                valueLabelMargin: const EdgeInsets.only(right: 8),
+                starOffColor: const Color(0xffe7e8ea),
+                starColor: Colors.yellow,
+                angle: 12,
+              ),
+            ],
           ),
         ),
       ),
