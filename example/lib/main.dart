@@ -62,7 +62,8 @@ class _MyAppState extends State<MyApp> {
                 starOffColor: const Color(0xffe7e8ea),
                 starColor: Colors.yellow,
               ),
-              const Divider(height: 10),Text('Vertical example'),
+              const Divider(height: 10),
+              Text('Vertical example'),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -96,7 +97,9 @@ class _MyAppState extends State<MyApp> {
                     starColor: Colors.yellow,
                   ),
                 ],
-              ),const Divider(height: 10),Text('Rotate example'),
+              ),
+              const Divider(height: 10),
+              Text('Rotate example'),
               RatingStars(
                 axis: Axis.horizontal,
                 value: value,
@@ -121,7 +124,7 @@ class _MyAppState extends State<MyApp> {
                 valueLabelVisibility: true,
                 animationDuration: Duration(milliseconds: 1000),
                 valueLabelPadding:
-                const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
+                    const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
                 valueLabelMargin: const EdgeInsets.only(right: 8),
                 starOffColor: const Color(0xffe7e8ea),
                 starColor: Colors.yellow,
