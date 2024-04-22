@@ -1,3 +1,9 @@
+## [1.1.0] - 20/04/2024
+
+* Breaking change: Migrate to Flutter 3.19.6
+* [New] Support vertical axis.
+* [New] Support z axis rotation.
+
 ## [1.0.3+4] - 25/06/2021
 
 * Fix demo image.

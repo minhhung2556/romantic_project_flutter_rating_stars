@@ -1,6 +1,6 @@
 library flutter_rating_stars;
 
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/generated/assets.dart';
@@ -97,6 +97,12 @@ class RatingStars extends StatefulWidget {
   /// [animationDuration] animated when the [value] is changed.
   final Duration animationDuration;
 
+  /// [axis] change [Axis]
+  final Axis axis;
+
+  /// [angle] to turn all stars in around z-axis, in degree.
+  final double angle;
+
   /// Constructor
   const RatingStars({
     Key? key,
@@ -122,6 +128,8 @@ class RatingStars extends StatefulWidget {
     this.starColor = Colors.yellow,
     this.onValueChanged,
     this.starBuilder,
+    this.axis = Axis.horizontal,
+    this.angle = 0.0,
   }) : super(key: key);
 
   @override
@@ -165,17 +173,13 @@ class _RatingStarsState extends State<RatingStars>
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
+    return _buildMainLayout(
+      builder: (context) => <Widget>[
         if (widget.valueLabelVisibility)
           Container(
-            padding: widget.valueLabelPadding,
-            margin: widget.valueLabelMargin,
-            child: Text(
-                "${widget.value.toStringAsPrecision(2)}${widget.maxValueVisibility ? '/${widget.maxValue.toStringAsPrecision(2)}' : ''}",
-                style: widget.valueLabelTextStyle),
+            padding: _buildInsets(widget.valueLabelPadding),
+            margin: _buildInsets(widget.valueLabelMargin),
+            child: _buildLabel,
             decoration: BoxDecoration(
                 color: widget.valueLabelColor,
                 shape: BoxShape.rectangle,
@@ -183,58 +187,22 @@ class _RatingStarsState extends State<RatingStars>
           ),
         Stack(
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                widget.starCount,
-                (index) {
-                  return Container(
-                    margin: index == widget.starCount - 1
-                        ? null
-                        : EdgeInsets.symmetric(
-                            horizontal: widget.starSpacing / 2),
-                    alignment: Alignment.center,
-                    child: _starWidget(index, true, widget.starOffColor),
-                  );
-                },
-              ),
-            ),
+            _buildListStars(
+                builder: (context, index) =>
+                    _starWidget(index, true, widget.starOffColor)),
             IgnorePointer(
               child: AnimatedBuilder(
                 animation: _animationController!,
                 builder: (context, child) {
-                  return ClipRect(
-                    child: Container(
-                      child: Align(
-                        widthFactor: max(
-                            0,
-                            min(widget.maxValue.toDouble(),
-                                widget.value / widget.maxValue)),
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            widget.starCount,
-                            (index) {
-                              return Container(
-                                margin: index == widget.starCount - 1
-                                    ? null
-                                    : EdgeInsets.symmetric(
-                                        horizontal: widget.starSpacing / 2),
-                                alignment: Alignment.center,
-                                child: Transform.scale(
-                                  scale: Tween<double>(begin: 0.0, end: 1.0)
-                                      .chain(CurveTween(
-                                          curve: Interval(0.15 * index, 1.0,
-                                              curve: Curves.elasticOut)))
-                                      .evaluate(_animationController!),
-                                  child: _starWidget(
-                                      index, false, widget.starColor),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+                  return _buildClipRect(
+                    builder: (context) => _buildListStars(
+                      builder: (context, index) => Transform.scale(
+                        scale: Tween<double>(begin: 0.0, end: 1.0)
+                            .chain(CurveTween(
+                                curve: Interval(0.15 * index, 1.0,
+                                    curve: Curves.elasticOut)))
+                            .evaluate(_animationController!),
+                        child: _starWidget(index, false, widget.starColor),
                       ),
                     ),
                   );
@@ -247,20 +215,40 @@ class _RatingStarsState extends State<RatingStars>
     );
   }
 
+  bool get isHorizontal => widget.axis == Axis.horizontal;
+
+  Widget _buildClipRect({required WidgetBuilder builder}) {
+    final factor = math.max(0.0,
+        math.min(widget.maxValue.toDouble(), widget.value / widget.maxValue));
+    return ClipRect(
+      child: Container(
+        child: Align(
+          widthFactor: isHorizontal ? factor : 1.0,
+          heightFactor: !isHorizontal ? factor : 1.0,
+          alignment: isHorizontal ? Alignment.centerLeft : Alignment.topCenter,
+          child: builder(context),
+        ),
+      ),
+    );
+  }
+
   Widget _starWidget(int index, bool action, [Color? color]) {
-    var _star = widget.starBuilder != null
-        ? SizedBox(
-            child: widget.starBuilder!(index, color),
-            width: widget.starSize,
-            height: widget.starSize,
-          )
-        : Image.asset(
-            Assets.assetsStarOff,
-            width: widget.starSize,
-            height: widget.starSize,
-            package: 'flutter_rating_stars',
-            color: color,
-          );
+    var _star = Transform.rotate(
+      angle: widget.angle * math.pi / 180.0,
+      child: widget.starBuilder != null
+          ? SizedBox(
+              child: widget.starBuilder!(index, color),
+              width: widget.starSize,
+              height: widget.starSize,
+            )
+          : Image.asset(
+              Assets.assetsStarOff,
+              width: widget.starSize,
+              height: widget.starSize,
+              package: 'flutter_rating_stars',
+              color: color,
+            ),
+    );
     if (!action) return _star;
     return ElevatedButton(
       style: ButtonStyle(
@@ -287,4 +275,55 @@ class _RatingStarsState extends State<RatingStars>
       child: _star,
     );
   }
+
+  Widget _buildMainLayout({required ListWidgetBuilder builder}) {
+    if (isHorizontal) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: builder(context),
+      );
+    } else {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: builder(context),
+      );
+    }
+  }
+
+  Widget _buildListStars({required IndexedWidgetBuilder builder}) =>
+      _buildMainLayout(
+        builder: (context) => List.generate(
+          widget.starCount,
+          (index) {
+            return Container(
+              margin: index == widget.starCount - 1
+                  ? null
+                  : EdgeInsets.symmetric(horizontal: widget.starSpacing / 2),
+              alignment: Alignment.center,
+              child: builder.call(context, index),
+            );
+          },
+        ),
+      );
+
+  Widget get _buildLabel => RotatedBox(
+        quarterTurns: isHorizontal ? 0 : 1,
+        child: Text(
+          "${widget.value.toStringAsPrecision(2)}${widget.maxValueVisibility ? '/${widget.maxValue.toStringAsPrecision(2)}' : ''}",
+          style: widget.valueLabelTextStyle,
+        ),
+      );
+
+  EdgeInsets _buildInsets(EdgeInsets insets) => isHorizontal
+      ? insets
+      : insets.copyWith(
+          left: widget.valueLabelPadding.vertical,
+          right: widget.valueLabelPadding.vertical,
+          top: widget.valueLabelPadding.horizontal,
+          bottom: widget.valueLabelPadding.horizontal,
+        );
 }
+
+typedef ListWidgetBuilder = List<Widget> Function(BuildContext context);
